@@ -1,0 +1,29 @@
+# Agent gateway config. Model/tool settings hot-reload on save.
+# server.* (host, port, tls) need a restart.
+
+server:
+  host: "127.0.0.1"        # configurable bind IP (127.0.0.1 = local only, 0.0.0.0 = all interfaces)
+  port: 8443
+  tls_enabled: false       # set true once certs exist (then use https://)
+  tls_cert: "certs/server.crt"
+  tls_key: "certs/server.key"
+  api_key_env: "AGENT_API_KEY"   # bearer token is read from this env var
+
+backend:
+  url: "http://127.0.0.1:11434"
+  model: "llama3.2:3b"
+  timeout_s: 600
+
+model:
+  num_ctx: 4096
+  temperature: 0.2
+  top_p: 0.9
+  num_predict: 512
+
+agent:
+  max_tool_steps: 8        # caps tool-chaining depth
+  system_prompt: >
+    You are a helpful agent. Use tools when they help. You may call several
+    tools in sequence, using earlier results to decide the next call.
+  enabled_tools: [get_time, calculator, read_note, write_note]
+  notes_dir: "notes"       # sandbox for read_note / write_note
